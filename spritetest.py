@@ -12,7 +12,7 @@ def read_sprite(ssheet, x, y):
 
 def main():
 	screen = pygame.display.set_mode((32, 32))
-	ssheet = pygame.image.load("textures/environment.png").convert()
+	ssheet = pygame.image.load("textures/environment.png").convert_alpha(screen)
 	ssheet.set_colorkey((0, 255, 255), 0)
 	
 	s_x, s_y = 0, 0

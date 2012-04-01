@@ -33,19 +33,24 @@ class Entity:
 
 	def move_to(self, x, y):
 		if self.valid_move(x, y):
+			entity = self.map_ref[x, y].entity
+			if entity:
+				if entity.alive:
+					entity.alive = False
+
 			self.map_ref[self.x, self.y].entity = None
 			self.x, self.y = x, y
 			self.map_ref[self.x, self.y].entity = self
+			return True
+
+		return False
 
 	def valid_move(self, x, y):
-		print x, y, self.map_ref.x, self.map_ref.y
-		print self.map_ref[x, y].valid_move
-		if x < 0 or x > self.map_ref.x:
+		if x < 0 or x >= self.map_ref.x:
 			return False
-		if y < 0 or y > self.map_ref.y:
+		if y < 0 or y >= self.map_ref.y:
 			return False
-		if self.map_ref[x, y].entity != None:
-			return False
+		print x, y, self.map_ref[x, y]
 		if not self.map_ref[x, y].valid_move:
 			return False
 

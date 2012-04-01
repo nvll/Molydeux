@@ -4,8 +4,6 @@ import pygame
 from pygame.locals import *
 from pygame.colordict import THECOLORS
 
-global Sprites
-
 class SpriteCache:
 	sprite_sheets = {}
 	sprites = {}
@@ -28,13 +26,15 @@ class SpriteLoader:
 	sheet = None
 	width = 0
 	height = 0
+	colorkey = ()
 	sprite_cache = {}
 
 	def __init__(self, path, width, height, colorkey = None):
-		self.sheet = pygame.image.load(path).convert()
+		self.sheet = pygame.image.load(path)
 
 		if colorkey is not None:
-			self.sheet.set_colorkey(colorkey)
+			self.sheet.set_colorkey(colorkey, RLEACCEL)
+			self.colorkey = colorkey
 		
 		self.width = width
 		self.height = height
@@ -46,6 +46,9 @@ class SpriteLoader:
 		rect = pygame.Rect((x * self.width, y * self.height, self.width, self.height))
 		sprite = pygame.Surface(rect.size).convert()
 		sprite.blit(self.sheet, (0, 0), rect)
+		sprite = sprite.convert()
+		if self.colorkey:
+			sprite.set_colorkey(self.colorkey, RLEACCEL)
 
 		return sprite 
 	
