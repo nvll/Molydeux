@@ -1,0 +1,62 @@
+#!/usr/bin/python
+
+from sys import *
+import pygame
+from pygame.locals import *
+from pygame.colordict import THECOLORS
+
+from molybear.map import Map
+from molybear.sprite import SpriteCache
+from molybear.texture import *
+from molybear.entity import *
+
+"""
+	def move(self, key):
+		new_x, new_y = self.pos_x, self.pos_y
+		if key == K_UP:
+			new_y = self.pos_y - 1
+		elif key == K_DOWN:
+			new_y = self.pos_y + 1
+		elif key == K_LEFT:
+			new_x = self.pos_x - 1
+		elif key == K_RIGHT:
+			new_x = self.pos_x + 1
+
+		if self.validate_move(new_x, new_y):
+			self.pos_x, self.pos_y = new_x, new_y
+
+"""
+def main():
+	pygame.init()
+	Entities = []
+	
+	game_map = Map("map.txt")
+
+	sprites = SpriteCache()
+	
+	screen = pygame.display.set_mode((32 * game_map.x, 32 * game_map.y))
+	sprites.add_sheet(texture_files[0], 8, 8, (0, 255, 255))
+	sprites.add_sheet(texture_files[1], 8, 8, (0, 255, 255))
+	game_map.load_sprites(sprites)
+	
+	player = Entity(3, 3, game_map, "P", "P", sprites)
+
+	while True:
+		for e in pygame.event.get():
+			if e.type == KEYDOWN:
+				if e.key == K_UP:
+					player.move_up()
+				elif e.key == K_DOWN:
+					player.move_down()
+				elif e.key == K_LEFT:
+					player.move_left()
+				elif e.key == K_RIGHT:
+					player.move_right()
+				elif e.key == K_q:
+					exit()
+		game_map.draw_map(screen)
+		pygame.display.flip()
+
+if __name__ == '__main__': main()
+
+
