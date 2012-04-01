@@ -9,14 +9,15 @@ texture_files = [
 ]
 
 object_map = ({
-	"=": ((texture_files[0], 12, 11), False),
-	"+": ((texture_files[0], 12, 12), False),
-	"x": ((texture_files[0], 3, 1), False),
-	"#": ((texture_files[0], 4, 1), False),
+	".": ((texture_files[0], 5, 2), True),
+	"-": ((texture_files[0], 0, 2), False),
+	"#": ((texture_files[0], 4, 2), False),
 	" ": ((texture_files[0], 14, 0), True),
 	"P": ((texture_files[1], 5, 13), False),
 	"p": ((texture_files[1], 8, 7), False),
-	"H": ((texture_files[1], 0, 8), False),
+	"H": ((texture_files[1], 10, 2), False),
+	"W": ((texture_files[1], 11, 2), False),
+	"R": ((texture_files[1], 12, 2), False),
 	"S": ((texture_files[1], 0, 6), False),
 })
 

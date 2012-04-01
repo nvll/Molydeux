@@ -1,5 +1,7 @@
 #!/usr/bin/python
 from texture import *
+from random import randint
+
 class Entity:
 	map_ref = None
 	x = 0
@@ -23,6 +25,23 @@ class Entity:
 		if not self.move_to(x, y):
 			print "couldn't place entity"
 	
+	def move(self, fps_goal):
+		if not self.alive:
+			return False
+
+		self.move_wait += 1
+		if self.move_wait >= fps_goal/3 and self.alive:
+			x = randint(0, 10)
+			if x <= 2:
+				self.move_left()
+			elif x > 2 and x <= 4:
+				self.move_right()
+			elif x > 4 and x <= 6:
+				self.move_up()
+			elif x > 6 and x <= 8:
+				self.move_down()
+			self.move_wait = 0
+
 	def move_left(self):
 		self.move_to(self.x - 1, self.y)
 	
@@ -41,7 +60,7 @@ class Entity:
 			if entity and self.player:
 				if entity.alive:
 					entity.alive = False
-					self.oxygen += 40
+					self.oxygen += 10
 
 			self.map_ref[self.x, self.y].entity = None
 			self.x, self.y = x, y

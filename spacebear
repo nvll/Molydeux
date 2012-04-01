@@ -32,7 +32,7 @@ def main():
 
 	font = pygame.font.SysFont("monospace", 36, True)
 	sprites = SpriteCache()
-	screen = pygame.display.set_mode((32 * game_map.x, (32 * game_map.y) + 50))
+	screen = pygame.display.set_mode((32 * game_map.x, (32 * game_map.y) + 100))
 	sprites.add_sheet(texture_files[0], 8, 8, (0, 255, 255))
 	sprites.add_sheet(texture_files[1], 8, 8, (0, 255, 255))
 	game_map.load_sprites(sprites)
@@ -40,17 +40,17 @@ def main():
 	clock = pygame.time.Clock()
 	
 	entities = []
-	player = Entity(3, 3, game_map, "P", "p", sprites, True)
-	entities.append(Entity(6, 6, game_map, "H", "S", sprites))
-	entities.append(Entity(3, 12, game_map, "H", "S", sprites))
-	entities.append(Entity(6, 15, game_map, "H", "S", sprites))
+	player = Entity(4, 10, game_map, "P", "p", sprites, True)
+	entities.append(Entity(3, 2, game_map, "H", "S", sprites))
+	entities.append(Entity(8, 3, game_map, "R", "S", sprites))
+	entities.append(Entity(8, 3, game_map, "W", "S", sprites))
+	entities.append(Entity(17, 9, game_map, "H", "S", sprites))
+	entities.append(Entity(14, 9, game_map, "R", "S", sprites))
+	entities.append(Entity(2, 6, game_map, "W", "S", sprites))
 
 	fps_goal = 30
 	while True:
 		clock.tick(fps_goal)
-
-
-		status = update_oxygen(player)
 		
 		for e in pygame.event.get():
 			if e.type == KEYDOWN:
@@ -64,26 +64,17 @@ def main():
 					player.move_right()
 				elif e.key == K_q:
 					exit()
+		
 
+		status = update_oxygen(player)
 		# Draw the background, then the black area for text
 		screen.fill((0, 0, 0))
 		screen.blit(bg, (0, 0))
 		game_map.draw_map(screen)
 		
+		
 		for entity in entities:
-			entity.move_wait += 1
-			if entity.move_wait >= fps_goal/2 and entity.alive:
-				x = randint(0, 10)
-				if x <= 2:
-					entity.move_left()
-				elif x > 2 and x <= 4:
-					entity.move_right()
-				elif x > 4 and x <= 6:
-					entity.move_up()
-				elif x > 6 and x <= 8:
-					entity.move_down()
-				entity.move_wait = 0
-
+			entity.move(fps_goal)
 			screen.blit(entity.get_sprite(), (entity.x * 32, entity.y * 32), None, 0)
 		screen.blit(player.get_sprite(), (player.x * 32, player.y * 32), None, 0)
 	
