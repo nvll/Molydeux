@@ -12,22 +12,6 @@ from molybear.sprite import SpriteCache
 from molybear.texture import *
 from molybear.entity import *
 
-"""
-	def move(self, key):
-		new_x, new_y = self.pos_x, self.pos_y
-		if key == K_UP:
-			new_y = self.pos_y - 1
-		elif key == K_DOWN:
-			new_y = self.pos_y + 1
-		elif key == K_LEFT:
-			new_x = self.pos_x - 1
-		elif key == K_RIGHT:
-			new_x = self.pos_x + 1
-
-		if self.validate_move(new_x, new_y):
-			self.pos_x, self.pos_y = new_x, new_y
-
-"""
 def main():
 	pygame.init()
 	Entities = []
@@ -42,13 +26,15 @@ def main():
 	game_map.load_sprites(sprites)
 	
 	entities = []
-	player = Entity(3, 3, game_map, "P", "P", sprites)
+	player = Entity(3, 3, game_map, "P", "p", sprites, True)
 	entities.append(Entity(6, 6, game_map, "H", "S", sprites))
 	entities.append(Entity(3, 12, game_map, "H", "S", sprites))
+	entities.append(Entity(6, 15, game_map, "H", "S", sprites))
 
 	clock = pygame.time.Clock()
+	fps_goal = 30
 	while True:
-		clock.tick(30)
+		clock.tick(fps_goal)
 		for e in pygame.event.get():
 			if e.type == KEYDOWN:
 				if e.key == K_UP:
@@ -64,7 +50,8 @@ def main():
 		game_map.draw_map(screen)
 
 		for entity in entities:
-			if entity.alive:
+			entity.move_wait += 1
+			if entity.move_wait >= fps_goal/2 and entity.alive:
 				x = randint(0, 10)
 				if x <= 2:
 					entity.move_left()
@@ -74,9 +61,14 @@ def main():
 					entity.move_up()
 				elif x > 6 and x <= 8:
 					entity.move_down()
+				entity.move_wait = 0
 
 			screen.blit(entity.get_sprite(), (entity.x * 32, entity.y * 32), None, 0)
 		screen.blit(player.get_sprite(), (player.x * 32, player.y * 32), None, 0)
+		player.oxygen -= .5
+		print player.oxygen
+		if player.oxygen == 0:
+			player.alive = False
 		pygame.display.flip()
 
 if __name__ == '__main__': main()
