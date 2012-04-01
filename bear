@@ -12,18 +12,32 @@ from molybear.sprite import SpriteCache
 from molybear.texture import *
 from molybear.entity import *
 
+def update_oxygen(player):
+		if player.oxygen > 0:
+			player.oxygen -= .5
+
+		if player.oxygen == 0:
+			player.alive = False
+
+		if (player.alive):
+			status = "Oxygen: %d%%" % player.oxygen
+		else:
+			status = "Dead bear is dead"
+		return status
+	
 def main():
 	pygame.init()
-	Entities = []
 	
 	game_map = Map("map.txt")
 
+	font = pygame.font.SysFont("monospace", 36, True)
 	sprites = SpriteCache()
-	
 	screen = pygame.display.set_mode((32 * game_map.x, (32 * game_map.y) + 50))
 	sprites.add_sheet(texture_files[0], 8, 8, (0, 255, 255))
 	sprites.add_sheet(texture_files[1], 8, 8, (0, 255, 255))
 	game_map.load_sprites(sprites)
+	bg = pygame.image.load("textures/bg.png").convert()
+	clock = pygame.time.Clock()
 	
 	entities = []
 	player = Entity(3, 3, game_map, "P", "p", sprites, True)
@@ -31,10 +45,13 @@ def main():
 	entities.append(Entity(3, 12, game_map, "H", "S", sprites))
 	entities.append(Entity(6, 15, game_map, "H", "S", sprites))
 
-	clock = pygame.time.Clock()
 	fps_goal = 30
 	while True:
 		clock.tick(fps_goal)
+
+
+		status = update_oxygen(player)
+		
 		for e in pygame.event.get():
 			if e.type == KEYDOWN:
 				if e.key == K_UP:
@@ -47,8 +64,12 @@ def main():
 					player.move_right()
 				elif e.key == K_q:
 					exit()
-		game_map.draw_map(screen)
 
+		# Draw the background, then the black area for text
+		screen.fill((0, 0, 0))
+		screen.blit(bg, (0, 0))
+		game_map.draw_map(screen)
+		
 		for entity in entities:
 			entity.move_wait += 1
 			if entity.move_wait >= fps_goal/2 and entity.alive:
@@ -65,11 +86,15 @@ def main():
 
 			screen.blit(entity.get_sprite(), (entity.x * 32, entity.y * 32), None, 0)
 		screen.blit(player.get_sprite(), (player.x * 32, player.y * 32), None, 0)
-		player.oxygen -= .5
-		print player.oxygen
-		if player.oxygen == 0:
-			player.alive = False
+	
+		font_surface = font.render(status, False, THECOLORS['white'])
+		screen.blit(font_surface, (10, 520))
 		pygame.display.flip()
+
+		if not player.alive:
+			pygame.time.wait(1000)
+			pygame.event.wait()
+			exit()
 
 if __name__ == '__main__': main()
 

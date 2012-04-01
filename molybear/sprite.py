@@ -56,6 +56,7 @@ def main():
 	s_x = s_y = 0
 
 	screen = pygame.display.set_mode((32, 32))
+	bg = pygame.image.load("textures/bg.png").convert()
 	screen.fill(THECOLORS['white'])
 	env_sprites = SpriteCache()
 	env_sprites.add_sheet("textures/environment.png", 8, 8, (0, 255, 255))

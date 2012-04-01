@@ -41,7 +41,7 @@ class Entity:
 			if entity and self.player:
 				if entity.alive:
 					entity.alive = False
-					self.oxygen += 25
+					self.oxygen += 40
 
 			self.map_ref[self.x, self.y].entity = None
 			self.x, self.y = x, y
