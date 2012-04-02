@@ -3,6 +3,7 @@ from texture import *
 import pygame
 from random import randint
 
+#TODO Player -really- needed to be a derived class from a base entity
 class Entity:
 	map_ref = None
 	x = 0
