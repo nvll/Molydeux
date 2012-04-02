@@ -1,5 +1,6 @@
 #!/usr/bin/python
 from texture import *
+import pygame
 from random import randint
 
 class Entity:
@@ -30,7 +31,7 @@ class Entity:
 			return False
 
 		self.move_wait += 1
-		if self.move_wait >= fps_goal/3 and self.alive:
+		if self.move_wait >= fps_goal/2.5 and self.alive:
 			x = randint(0, 10)
 			if x <= 2:
 				self.move_left()
@@ -60,7 +61,9 @@ class Entity:
 			if entity and self.player:
 				if entity.alive:
 					entity.alive = False
-					self.oxygen += 10
+					self.oxygen += 15
+					sound = pygame.mixer.Sound("audio/scream.wav")
+					sound.play()
 
 			self.map_ref[self.x, self.y].entity = None
 			self.x, self.y = x, y

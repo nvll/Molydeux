@@ -12,18 +12,30 @@ from molybear.sprite import SpriteCache
 from molybear.texture import *
 from molybear.entity import *
 
+def display_splash(screen):
+	screen.fill((0, 0, 0))
+	rect = screen.get_rect()
+	font = pygame.font.SysFont("monospace", 16, True)
+	font_surface = font.render("In the future, bears can only breathe by eating space wizards...", False, THECOLORS['white'])
+	screen.blit(font_surface, (0, rect.centery))
+	img = pygame.image.load("textures/moly.png").convert()
+	screen.blit(img, (screen.get_rect().centerx - (img.get_rect().width/2), 0))
+	pygame.display.flip()
+	pygame.time.wait(5000)
+
+	
 def update_oxygen(player):
-		if player.oxygen > 0:
-			player.oxygen -= .5
+	if player.oxygen > 0:
+		player.oxygen -= .5
 
-		if player.oxygen == 0:
-			player.alive = False
+	if player.oxygen == 0:
+		player.alive = False
 
-		if (player.alive):
-			status = "Oxygen: %d%%" % player.oxygen
-		else:
-			status = "Dead bear is dead"
-		return status
+	if (player.alive):
+		status = "Oxygen: %d%%" % player.oxygen
+	else:
+		status = "Dead bear is dead"
+	return status
 	
 def main():
 	pygame.init()
@@ -49,6 +61,9 @@ def main():
 	entities.append(Entity(2, 6, game_map, "W", "S", sprites))
 
 	fps_goal = 30
+
+	display_splash(screen)
+
 	while True:
 		clock.tick(fps_goal)
 		
@@ -71,7 +86,6 @@ def main():
 		screen.fill((0, 0, 0))
 		screen.blit(bg, (0, 0))
 		game_map.draw_map(screen)
-		
 		
 		for entity in entities:
 			entity.move(fps_goal)
